@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import logging
 import pprint
 import re
+import uuid
 
 from pytube.compat import unicode
 from pytube.exceptions import RegexMatchError
@@ -75,27 +76,34 @@ def apply_mixin(dct, key, func, *args, **kwargs):
     dct[key] = func(dct[key], *args, **kwargs)
 
 
+# def safe_filename(s, max_length=255):
+#     """Sanitize a string making it safe to use as a filename.
+#
+#     This function was based off the limitations outlined here:
+#     https://en.wikipedia.org/wiki/Filename.
+#
+#     :param str s:
+#         A string to make safe for use as a file name.
+#     :param int max_length:
+#         The maximum filename character length.
+#     :rtype: str
+#     :returns:
+#         A sanitized string.
+#     """
+#     # Characters in range 0-31 (0x00-0x1F) are not allowed in ntfs filenames.
+#     ntfs_chrs = [chr(i) for i in range(0, 31)]
+#     chrs = [
+#         '\"', '\#', '\$', '\%', '\'', '\*', '\,', '\.', '\/', '\:',
+#         '\;', '\<', '\>', '\?', '\\', '\^', '\|', '\~', '\\\\',
+#     ]
+#     pattern = '|'.join(ntfs_chrs + chrs)
+#     regex = re.compile(pattern, re.UNICODE)
+#     filename = regex.sub('', s)
+#     return unicode(filename[:max_length].rsplit(' ', 0)[0])
+
+# def safe_filename(s, max_length=255):
+#     import base64
+#     return base64.urlsafe_b64encode(s)
+
 def safe_filename(s, max_length=255):
-    """Sanitize a string making it safe to use as a filename.
-
-    This function was based off the limitations outlined here:
-    https://en.wikipedia.org/wiki/Filename.
-
-    :param str s:
-        A string to make safe for use as a file name.
-    :param int max_length:
-        The maximum filename character length.
-    :rtype: str
-    :returns:
-        A sanitized string.
-    """
-    # Characters in range 0-31 (0x00-0x1F) are not allowed in ntfs filenames.
-    ntfs_chrs = [chr(i) for i in range(0, 31)]
-    chrs = [
-        '\"', '\#', '\$', '\%', '\'', '\*', '\,', '\.', '\/', '\:',
-        '\;', '\<', '\>', '\?', '\\', '\^', '\|', '\~', '\\\\',
-    ]
-    pattern = '|'.join(ntfs_chrs + chrs)
-    regex = re.compile(pattern, re.UNICODE)
-    filename = regex.sub('', s)
-    return unicode(filename[:max_length].rsplit(' ', 0)[0])
+    return str(uuid.uuid4())
